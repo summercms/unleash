@@ -9,6 +9,7 @@ import FeatureToggleService from '../../services/feature-toggle-service';
 import { IAuthRequest } from '../unleash-types';
 import { FeaturesSchema } from '../../openapi/spec/features-schema';
 import { createResponseSchema } from '../../openapi/operation';
+import { serializeDates } from '../../types/serialize-dates';
 
 export default class ArchiveController extends Controller {
     private readonly logger: Logger;
@@ -74,7 +75,7 @@ export default class ArchiveController extends Controller {
 
         res.json({
             version: 2,
-            features: features,
+            features: serializeDates(features),
         });
     }
 
@@ -90,7 +91,7 @@ export default class ArchiveController extends Controller {
             );
         res.json({
             version: 2,
-            features: features,
+            features: serializeDates(features),
         });
     }
 
