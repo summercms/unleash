@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Request, Response } from 'express';
-
 import Controller from '../controller';
-
 import { extractUsername } from '../../util/extract-user';
 import {
     CREATE_FEATURE,
@@ -18,14 +16,13 @@ import { IFeatureToggleQuery } from '../../types/model';
 import FeatureTagService from '../../services/feature-tag-service';
 import { IAuthRequest } from '../unleash-types';
 import { DEFAULT_ENV } from '../../util/constants';
-import { featuresResponse } from '../../openapi/spec/features-response';
 import { FeaturesSchema } from '../../openapi/spec/features-schema';
-import { tagsResponse } from '../../openapi/spec/tags-response';
-import { tagResponse } from '../../openapi/spec/tag-response';
-import { createTagRequest } from '../../openapi/spec/create-tag-request';
-import { emptyResponse } from '../../openapi/spec/empty-response';
 import { TagSchema } from '../../openapi/spec/tag-schema';
-import { TagsResponseSchema } from '../../openapi/spec/tags-response-schema';
+import { TagsSchema } from '../../openapi/spec/tags-schema';
+import {
+    createRequestSchema,
+    createResponseSchema,
+} from '../../openapi/operation';
 
 const version = 1;
 
@@ -76,7 +73,7 @@ class FeatureController extends Controller {
                 openApiService.validPath({
                     tags: ['admin'],
                     operationId: 'getAllToggles',
-                    responses: { 200: featuresResponse },
+                    responses: { 200: createResponseSchema('featuresSchema') },
                     deprecated: true,
                 }),
             ],
@@ -91,7 +88,7 @@ class FeatureController extends Controller {
                 openApiService.validPath({
                     tags: ['admin'],
                     operationId: 'validateFeature',
-                    responses: { 200: emptyResponse },
+                    responses: { 200: createResponseSchema('emptySchema') },
                 }),
             ],
         });
@@ -106,7 +103,7 @@ class FeatureController extends Controller {
                 openApiService.validPath({
                     tags: ['admin'],
                     operationId: 'listTags',
-                    responses: { 200: tagsResponse },
+                    responses: { 200: createResponseSchema('tagsSchema') },
                 }),
             ],
         });
@@ -120,8 +117,8 @@ class FeatureController extends Controller {
                 openApiService.validPath({
                     tags: ['admin'],
                     operationId: 'addTag',
-                    requestBody: createTagRequest,
-                    responses: { 201: tagResponse },
+                    requestBody: createRequestSchema('tagSchema'),
+                    responses: { 201: createResponseSchema('tagSchema') },
                 }),
             ],
         });
@@ -136,7 +133,7 @@ class FeatureController extends Controller {
                 openApiService.validPath({
                     tags: ['admin'],
                     operationId: 'removeTag',
-                    responses: { 200: emptyResponse },
+                    responses: { 200: createResponseSchema('emptySchema') },
                 }),
             ],
         });
@@ -194,7 +191,7 @@ class FeatureController extends Controller {
 
     async listTags(
         req: Request<{ featureName: string }, any, any, any>,
-        res: Response<TagsResponseSchema>,
+        res: Response<TagsSchema>,
     ): Promise<void> {
         const tags = await this.tagService.listTags(req.params.featureName);
         res.json({ version, tags });
