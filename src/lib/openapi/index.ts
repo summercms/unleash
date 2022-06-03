@@ -15,6 +15,8 @@ import { overrideSchema } from './spec/override-schema';
 import { parametersSchema } from './spec/parameters-schema';
 import { patchSchema } from './spec/patch-schema';
 import { patchesSchema } from './spec/patches-schema';
+import { projectSchema } from './spec/project-schema';
+import { projectsSchema } from './spec/projects-schema';
 import { strategySchema } from './spec/strategy-schema';
 import { tagSchema } from './spec/tag-schema';
 import { tagsSchema } from './spec/tags-schema';
@@ -54,6 +56,8 @@ export const schemas = {
     parametersSchema,
     patchSchema,
     patchesSchema,
+    projectSchema,
+    projectsSchema,
     strategySchema,
     tagSchema,
     tagsSchema,

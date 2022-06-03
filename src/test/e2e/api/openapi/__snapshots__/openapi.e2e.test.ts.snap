@@ -393,6 +393,61 @@ Object {
         },
         "type": "array",
       },
+      "projectSchema": Object {
+        "additionalProperties": false,
+        "properties": Object {
+          "createdAt": Object {
+            "format": "date-time",
+            "type": "string",
+          },
+          "description": Object {
+            "type": "string",
+          },
+          "featureCount": Object {
+            "type": "number",
+          },
+          "health": Object {
+            "type": "number",
+          },
+          "id": Object {
+            "type": "string",
+          },
+          "memberCount": Object {
+            "type": "number",
+          },
+          "name": Object {
+            "type": "string",
+          },
+          "updatedAt": Object {
+            "format": "date-time",
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "id",
+          "name",
+        ],
+        "type": "object",
+      },
+      "projectsSchema": Object {
+        "additionalProperties": false,
+        "properties": Object {
+          "projects": Object {
+            "items": Object {
+              "$ref": "#/components/schemas/projectSchema",
+            },
+            "type": "array",
+          },
+          "version": Object {
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "version",
+          "projects",
+        ],
+        "type": "object",
+      },
       "strategySchema": Object {
         "additionalProperties": false,
         "properties": Object {
@@ -631,6 +686,66 @@ Object {
         ],
       },
     },
+    "/api/admin/archive/revive/{featureName}": Object {
+      "post": Object {
+        "operationId": "reviveFeature",
+        "parameters": Array [
+          Object {
+            "in": "path",
+            "name": "featureName",
+            "required": true,
+            "schema": Object {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/emptySchema",
+                },
+              },
+            },
+            "description": "emptySchema",
+          },
+        },
+        "tags": Array [
+          "admin",
+        ],
+      },
+    },
+    "/api/admin/archive/{featureName}": Object {
+      "delete": Object {
+        "operationId": "deleteFeature",
+        "parameters": Array [
+          Object {
+            "in": "path",
+            "name": "featureName",
+            "required": true,
+            "schema": Object {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/emptySchema",
+                },
+              },
+            },
+            "description": "emptySchema",
+          },
+        },
+        "tags": Array [
+          "admin",
+        ],
+      },
+    },
     "/api/admin/features": Object {
       "get": Object {
         "deprecated": true,
@@ -780,6 +895,26 @@ Object {
               },
             },
             "description": "emptySchema",
+          },
+        },
+        "tags": Array [
+          "admin",
+        ],
+      },
+    },
+    "/api/admin/projects": Object {
+      "get": Object {
+        "operationId": "getProjects",
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/projectsSchema",
+                },
+              },
+            },
+            "description": "projectsSchema",
           },
         },
         "tags": Array [
