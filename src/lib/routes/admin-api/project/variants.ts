@@ -9,10 +9,8 @@ import { NONE, UPDATE_FEATURE_VARIANTS } from '../../../types/permissions';
 import { IVariant } from '../../../types/model';
 import { extractUsername } from '../../../util/extract-user';
 import { IAuthRequest } from '../../unleash-types';
-import { featureVariantsResponse } from '../../../openapi/spec/feature-variants-response';
-import { patchRequest } from '../../../openapi/spec/patch-request';
-import { updateFeatureVariantsRequest } from '../../../openapi/spec/update-feature-variants-request';
 import { FeatureVariantsSchema } from '../../../openapi/spec/feature-variants-schema';
+import { createRequestSchema, createResponseSchema } from '../../../openapi';
 
 const PREFIX = '/:projectId/features/:featureName/variants';
 
@@ -48,7 +46,9 @@ export default class VariantsController extends Controller {
                 openApiService.validPath({
                     tags: ['admin'],
                     operationId: 'getFeatureVariants',
-                    responses: { 200: featureVariantsResponse },
+                    responses: {
+                        200: createResponseSchema('featureVariantsSchema'),
+                    },
                 }),
             ],
         });
@@ -61,8 +61,10 @@ export default class VariantsController extends Controller {
                 openApiService.validPath({
                     tags: ['admin'],
                     operationId: 'patchFeatureVariants',
-                    requestBody: patchRequest,
-                    responses: { 200: featureVariantsResponse },
+                    requestBody: createRequestSchema('patchesSchema'),
+                    responses: {
+                        200: createResponseSchema('featureVariantsSchema'),
+                    },
                 }),
             ],
         });
@@ -75,8 +77,10 @@ export default class VariantsController extends Controller {
                 openApiService.validPath({
                     tags: ['admin'],
                     operationId: 'overwriteFeatureVariants',
-                    requestBody: updateFeatureVariantsRequest,
-                    responses: { 200: featureVariantsResponse },
+                    requestBody: createRequestSchema('variantsSchema'),
+                    responses: {
+                        200: createResponseSchema('featureVariantsSchema'),
+                    },
                 }),
             ],
         });
@@ -88,7 +92,7 @@ export default class VariantsController extends Controller {
     ): Promise<void> {
         const { featureName } = req.params;
         const variants = await this.featureService.getVariants(featureName);
-        res.status(200).json({ version: '1', variants: variants || [] });
+        res.status(200).json({ version: 1, variants: variants || [] });
     }
 
     async patchVariants(
@@ -105,7 +109,7 @@ export default class VariantsController extends Controller {
             userName,
         );
         res.status(200).json({
-            version: '1',
+            version: 1,
             variants: updatedFeature.variants,
         });
     }
@@ -123,7 +127,7 @@ export default class VariantsController extends Controller {
             userName,
         );
         res.status(200).json({
-            version: '1',
+            version: 1,
             variants: updatedFeature.variants,
         });
     }
